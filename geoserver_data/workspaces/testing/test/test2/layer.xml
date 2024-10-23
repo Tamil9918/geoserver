@@ -1,0 +1,16 @@
+<layer>
+  <name>test2</name>
+  <id>LayerInfoImpl--13f319ea:192aef1c7a2:-7fff</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--13f319ea:192aef1c7a2:-8000</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+  <dateCreated>2024-10-21 11:58:54.789 UTC</dateCreated>
+</layer>

@@ -1,0 +1,45 @@
+# Use the official Tomcat base image
+FROM tomcat:9.0-alpine AS geoserver
+
+ENV GEOSERVER_DATA_DIR=/usr/local/geoserver_data
+#ENV JAVA_OPTS="-Xms1g -Xmx4g"
+ENV JAVA_OPTS="-Xms1g -Xmx4g -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
+
+# Create a tomcat user and group
+RUN addgroup -S tomcat && adduser -S adminUser -G tomcat
+
+# Create the data directory
+RUN mkdir -p ${GEOSERVER_DATA_DIR}
+
+# Set permissions for the GeoServer data directory
+RUN chown -R adminUser:tomcat ${GEOSERVER_DATA_DIR}
+#RUN chown -R root:root ${GEOSERVER_DATA_DIR}
+
+# Set the working directory for GeoServer
+WORKDIR /usr/local/tomcat/webapps
+
+#Copy the GeoServer WAR file into the webapps directory of Tomcat
+COPY geoserver.war ./
+
+# Change ownership of the geoserver.war file to adminUser
+RUN chown adminUser:tomcat ./geoserver.war
+
+
+# Set permissions for the webapps directory for the adminUser
+RUN chown -R adminUser:tomcat /usr/local/tomcat/webapps
+
+# Change ownership of the entire Tomcat directory to adminUser
+RUN chown -R adminUser:tomcat /usr/local/tomcat
+
+# Set executable permissions for the catalina.sh and other scripts
+RUN chmod +x /usr/local/tomcat/bin/*.sh
+
+# Optional: Expose port 8080
+EXPOSE 8080
+
+# Switch to the tomcat user
+USER adminUser
+
+# Start Tomcat
+CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+
